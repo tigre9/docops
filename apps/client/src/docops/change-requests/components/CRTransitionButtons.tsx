@@ -115,7 +115,7 @@ export function CRTransitionButtons({ cr }: CRTransitionButtonsProps) {
   return (
     <>
       <Group gap="xs" wrap="wrap">
-        {data.actions.map((act) => (
+        {data.actions.filter((act) => act.action !== 'assign_to_self').map((act) => (
           <Button
             key={act.action}
             size="sm"

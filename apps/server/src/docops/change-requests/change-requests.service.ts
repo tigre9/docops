@@ -207,6 +207,7 @@ export class ChangeRequestsService {
         updates.published_version_id = historyId;
         updates.published_at = new Date();
         updates.tech_lead_id = authUser.id;
+        updates.implementer_id = authUser.id;
         // Revoke writer from implementer
         if (crAny.implementerId) {
           await (trx as any)
