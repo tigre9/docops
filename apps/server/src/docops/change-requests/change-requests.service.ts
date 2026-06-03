@@ -46,23 +46,23 @@ export class ChangeRequestsService {
   async createChangeRequest(dto: CreateChangeRequestDto, authUser: User) {
     const service = await this.db
       .selectFrom('services' as any)
-      .select(['id'])
+      .select(['id', 'rootPageId'] as any)
       .where('id' as any, '=', dto.serviceId)
       .executeTakeFirst();
     if (!service) throw new NotFoundException('Service not found');
 
-    const page = await this.db
-      .selectFrom('pages')
-      .select(['id'])
-      .where('id', '=', dto.pageId)
-      .executeTakeFirst();
-    if (!page) throw new NotFoundException('Page not found');
+    const pageId = (service as any).rootPageId;
+    if (!pageId) {
+      throw new BadRequestException(
+        'Service has no root page. Configure the service space first.',
+      );
+    }
 
     await this.checkNoActiveCr(dto.serviceId, '00000000-0000-0000-0000-000000000000');
 
     return this.repo.insert({
       service_id: dto.serviceId,
-      page_id: dto.pageId,
+      page_id: pageId,
       title: dto.title,
       description: dto.description,
       justification: dto.justification,

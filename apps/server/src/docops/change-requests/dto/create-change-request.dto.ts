@@ -11,9 +11,6 @@ export class CreateChangeRequestDto {
   @IsUUID()
   serviceId: string;
 
-  @IsUUID()
-  pageId: string;
-
   @IsString()
   @MinLength(3)
   title: string;

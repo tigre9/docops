@@ -85,7 +85,6 @@ export interface ListCrParams {
 
 export interface CreateCrPayload {
   serviceId: string;
-  pageId: string;
   title: string;
   description: string;
   justification: string;

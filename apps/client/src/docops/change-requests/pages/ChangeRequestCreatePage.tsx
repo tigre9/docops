@@ -26,7 +26,6 @@ import { getAppName } from "@/lib/config";
 
 interface FormValues {
   serviceId: string;
-  pageId: string;
   title: string;
   description: string;
   justification: string;
@@ -49,7 +48,6 @@ export default function ChangeRequestCreatePage() {
     servicesData?.items.map((s) => ({
       value: s.id,
       label: s.name,
-      pageId: s.rootPageId ?? "",
     })) ?? [];
 
   const preselected = serviceCode
@@ -59,7 +57,6 @@ export default function ChangeRequestCreatePage() {
   const form = useForm<FormValues>({
     initialValues: {
       serviceId: preselected?.id ?? "",
-      pageId: preselected?.rootPageId ?? "",
       title: "",
       description: "",
       justification: "",
@@ -69,10 +66,6 @@ export default function ChangeRequestCreatePage() {
     },
     validate: {
       serviceId: (v) => (!v ? t("Service is required") : null),
-      pageId: (v) =>
-        !v
-          ? t("Service has no root page. Configure the service space first.")
-          : null,
       title: (v) =>
         v.trim().length < 3 ? t("Title must be at least 3 characters") : null,
       description: (v) =>
@@ -88,10 +81,7 @@ export default function ChangeRequestCreatePage() {
 
   useEffect(() => {
     if (preselected) {
-      form.setValues({
-        serviceId: preselected.id,
-        pageId: preselected.rootPageId ?? "",
-      });
+      form.setValues({ serviceId: preselected.id });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preselected?.id]);
@@ -101,20 +91,14 @@ export default function ChangeRequestCreatePage() {
   const handleServiceChange = (val: string | null) => {
     const svc = servicesData?.items.find((s) => s.id === val);
     if (svc) {
-      if (!svc.rootPageId) {
-        setNoPageError(true);
-        form.setValues({ serviceId: svc.id, pageId: "" });
-      } else {
-        setNoPageError(false);
-        form.setValues({ serviceId: svc.id, pageId: svc.rootPageId });
-      }
+      setNoPageError(!svc.rootPageId);
+      form.setValues({ serviceId: svc.id });
     }
   };
 
   const handleSubmit = (values: FormValues) => {
     const payload: CreateCrPayload = {
       serviceId: values.serviceId,
-      pageId: values.pageId,
       title: values.title.trim(),
       description: values.description.trim(),
       justification: values.justification.trim(),
