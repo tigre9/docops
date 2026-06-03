@@ -63,8 +63,7 @@ export default function ChangeRequestDetailPage() {
     );
   }
 
-  const canEditRefs =
-    EDITABLE_REF_STATUSES.includes(cr.status) && cr.implementerId === currentUserId;
+  const canEditRefs = EDITABLE_REF_STATUSES.includes(cr.status);
 
   const servicePath = cr.serviceId ? `/services/${cr.serviceId}` : "/services";
 

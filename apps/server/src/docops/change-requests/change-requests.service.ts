@@ -9,7 +9,6 @@ import { InjectKysely } from 'nestjs-kysely';
 import { KyselyDB } from '@docmost/db/types/kysely.types';
 import { User } from '@docmost/db/types/entity.types';
 import { executeTx } from '@docmost/db/utils';
-import { sql } from 'kysely';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { CreateChangeRequestDto } from './dto/create-change-request.dto';
@@ -177,18 +176,6 @@ export class ChangeRequestsService {
           )
           .execute();
       } else if (dto.action === 'publish') {
-        // Requires >=1 external ref — checked inside the transaction to avoid TOCTOU
-        const refCountRow = await (trx as any)
-          .selectFrom('external_refs')
-          .select(sql`COUNT(*)`.as('count'))
-          .where('change_request_id', '=', dto.id)
-          .where('ref_type', 'in', ['PR', 'COMMIT'])
-          .executeTakeFirst();
-        if (Number(refCountRow?.count ?? 0) === 0) {
-          throw new BadRequestException(
-            'At least one PR or COMMIT external ref required before publishing',
-          );
-        }
         if (!dto.docVersion) {
           throw new BadRequestException('docVersion is required for publish');
         }
