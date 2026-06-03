@@ -83,24 +83,9 @@ export default function ChangeRequestDetailPage() {
               <Title order={2}>{cr.title}</Title>
               <Group gap="xs">
                 <CRStateBadge status={cr.status} size="md" />
-                <Badge
-                  color={PRIORITY_COLORS[cr.priority]}
-                  variant="light"
-                  size="md"
-                >
-                  {t(cr.priority)}
-                </Badge>
-                {cr.impact && (
-                  <Badge color="gray" variant="outline" size="md">
-                    {t("Impact")}: {t(cr.impact)}
-                  </Badge>
-                )}
-                <Badge color="blue" variant="outline" size="md">
-                  {t("Doc v{{version}}", { version: cr.serviceDocVersion ?? '0.0.0' })}
-                </Badge>
                 {cr.status === 'PUBLISHED' && cr.docVersion && (
                   <Badge color="green" size="md">
-                    {t("Pubblicata come v{{version}}", { version: cr.docVersion })}
+                    {t("Versione v{{version}}", { version: cr.docVersion })}
                   </Badge>
                 )}
               </Group>
@@ -112,6 +97,12 @@ export default function ChangeRequestDetailPage() {
           {/* Metadata */}
           <Paper withBorder p="md" radius="md">
             <Stack gap="sm">
+              {cr.serviceName && (
+                <Stack gap={2}>
+                  <Text size="sm" fw={600}>{t("Service")}</Text>
+                  <Text size="sm">{cr.serviceName}</Text>
+                </Stack>
+              )}
               {cr.description && (
                 <Stack gap={2}>
                   <Text size="sm" fw={600}>{t("Description")}</Text>
@@ -124,6 +115,16 @@ export default function ChangeRequestDetailPage() {
                   <Text size="sm">{cr.justification}</Text>
                 </Stack>
               )}
+              <Group gap="xs" wrap="wrap">
+                <Badge color={PRIORITY_COLORS[cr.priority]} variant="light" size="sm">
+                  {t("Priority")}: {t(cr.priority)}
+                </Badge>
+                {cr.impact && (
+                  <Badge color="gray" variant="outline" size="sm">
+                    {t("Impact")}: {t(cr.impact)}
+                  </Badge>
+                )}
+              </Group>
               <Group gap="xl" wrap="wrap">
                 {cr.dueDate && (
                   <Stack gap={2}>

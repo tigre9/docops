@@ -14,7 +14,7 @@ export class ChangeRequestsRepository {
     return (db as any)
       .selectFrom('change_requests as cr')
       .selectAll('cr')
-      .select(['s.code as serviceCode', 's.doc_version as serviceDocVersion'])
+      .select(['s.name as serviceName', 's.code as serviceCode', 's.doc_version as serviceDocVersion'])
       .leftJoin('services as s', 's.id', 'cr.service_id')
       .where('cr.id', '=', id)
       .executeTakeFirst();
