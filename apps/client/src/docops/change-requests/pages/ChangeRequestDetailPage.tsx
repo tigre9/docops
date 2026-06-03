@@ -194,7 +194,7 @@ export default function ChangeRequestDetailPage() {
               <Title order={5} mb="sm">
                 {t("Timeline")}
               </Title>
-              <CRTimeline events={cr.events ?? []} />
+              <CRTimeline events={cr.events ?? []} createdAt={cr.createdAt} />
             </Paper>
 
             <Paper withBorder p="md" radius="md" flex={1} style={{ minWidth: 280 }}>

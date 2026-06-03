@@ -2,6 +2,7 @@ import { Stack, Text, Timeline } from "@mantine/core";
 import {
   IconCheck,
   IconGitBranch,
+  IconPlus,
   IconX,
 } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
@@ -23,21 +24,31 @@ function eventColor(toStatus: string): string {
 
 interface CRTimelineProps {
   events: CrEvent[];
+  createdAt?: string;
 }
 
-export function CRTimeline({ events }: CRTimelineProps) {
+export function CRTimeline({ events, createdAt }: CRTimelineProps) {
   const { t } = useTranslation();
-
-  if (events.length === 0) {
-    return (
-      <Text size="sm" c="dimmed">
-        {t("No events yet")}
-      </Text>
-    );
-  }
+  const totalItems = 1 + events.length;
 
   return (
-    <Timeline active={events.length - 1} bulletSize={24} lineWidth={2}>
+    <Timeline active={totalItems - 1} bulletSize={24} lineWidth={2}>
+      <Timeline.Item
+        bullet={<IconPlus size={14} />}
+        color="blue"
+        title={
+          <Text size="sm" fw={500}>
+            {t("CR aperta")}
+          </Text>
+        }
+      >
+        {createdAt && (
+          <Text size="xs" c="dimmed">
+            {new Date(createdAt).toLocaleString()}
+          </Text>
+        )}
+      </Timeline.Item>
+
       {events.map((ev) => (
         <Timeline.Item
           key={ev.id}
