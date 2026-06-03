@@ -34,7 +34,7 @@ export function CRCommentsThread({ events }: CRCommentsThreadProps) {
           <Stack key={ev.id} gap={2} pl="sm" style={{ borderLeft: "2px solid var(--mantine-color-gray-3)" }}>
             <Text size="sm">"{ev.reason}"</Text>
             <Text size="xs" c="dimmed">
-              {t(ev.to_status)} — {new Date(ev.created_at).toLocaleString()}
+              {t(ev.toStatus)} — {new Date(ev.createdAt).toLocaleString()}
             </Text>
           </Stack>
         ))

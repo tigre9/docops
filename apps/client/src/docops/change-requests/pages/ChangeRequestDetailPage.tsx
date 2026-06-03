@@ -85,7 +85,7 @@ export default function ChangeRequestDetailPage() {
                 <CRStateBadge status={cr.status} size="md" />
                 {cr.status === 'PUBLISHED' && cr.docVersion && (
                   <Badge color="green" size="md">
-                    {t("Versione v{{version}}", { version: cr.docVersion })}
+                    {`v${cr.docVersion}`}
                   </Badge>
                 )}
               </Group>
